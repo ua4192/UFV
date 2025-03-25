@@ -68,3 +68,8 @@ New-ADUser -Name "user1" -SamAccountName "user1" -UserPrincipalName "user1@$Doma
 New-ADUser -Name "user2" -SamAccountName "user2" -UserPrincipalName "user2@$DomainName" -Path "CN=Users,DC=UFV,DC=org" -AccountPassword (ConvertTo-SecureString "P@ssword123" -AsPlainText -Force) -Enabled $true
 
 Write-Host "Configuración completada. Reinicia el servidor si es necesario."
+
+
+
+
+# End
