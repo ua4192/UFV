@@ -24,10 +24,6 @@ DOMAIN="UFV.org"
 FQDN="${VMNAME}.${DOMAIN}"
 SCRIPTPATH="E:\\UFV\\hosts\\UFV\\scripts"
 
-# Carpeta compartida
-SHARED_FOLDER_NAME="UFV"
-SHARED_FOLDER_PATH="C:\\UFV"
-
 # Validación de argumentos
 if [ "$#" -ne 1 ]; then
     echo "Número de argumentos inválidos: ${0} serverName"
@@ -78,13 +74,6 @@ VBoxManage storageattach "$VMNAME" --storagectl "IDE Controller" --port 0 --devi
 
 # Configurar arranque desde CD
 VBoxManage modifyvm "$VMNAME" --boot1 dvd --boot2 disk --boot3 none --boot4 none
-
-# Habilitar portapapeles bidireccional y arrastrar y soltar
-VBoxManage modifyvm "$VMNAME" --clipboard-mode bidirectional
-VBoxManage modifyvm "$VMNAME" --drag-and-drop bidirectional
-
-# Configurar carpeta compartida
-VBoxManage sharedfolder add "$VMNAME" --name "$SHARED_FOLDER_NAME" --hostpath "$SHARED_FOLDER_PATH" --automount
 
 # Instalación desatendida
 VBoxManage unattended install "$VMNAME" \

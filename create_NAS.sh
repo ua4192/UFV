@@ -112,4 +112,4 @@ for i in $(seq 1 $NUM_DISKS); do
     VBoxManage storageattach "$VMNAME" --storagectl "$CONTROLLER_NAME" --port $PORT_INDEX --device 0 --type hdd --medium "$DISK_FILE"
 done
 
-echo "Proceso completado."
+echo "Máquina virtual $VMNAME creada y configurada correctamente."

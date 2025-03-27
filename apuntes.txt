@@ -1,0 +1,95 @@
+
+#############################################################################################
+# Comandos utiles mdadm:
+#############################################################################################
+sudo mdadm --detail /dev/md0
+sudo mdadm --fail /dev/md0 /dev/sdb
+sudo mdadm --detail /dev/md0
+
+sudo mdadm --remove /dev/md0 /dev/sdb
+sudo mdadm --add /dev/md0 /dev/sdb
+sudo mdadm --detail /dev/md0
+
+
+
+#############################################################################################
+# Comandos utiles VBoxManage:
+#############################################################################################
+VBoxManage list runningvms
+VBoxManage showvminfo "APPSERVER clonar"
+VBoxManage guestproperty enumerate "APPSERVER clonar"
+
+#############################################################################################
+# Installation of Guest Additions Software on VM:
+#############################################################################################
+VBoxManage storageattach "APPSERVER clonar" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "C:\Program Files\Oracle\VirtualBox\VBoxGuestAdditions.iso"
+VBoxManage guestcontrol "APPSERVER clonar" run --username "administrator" --password "Airbusds2024!" --exe "/bin/bash" --wait-stdout -- bash -c "sudo apt update && sudo apt install -y build-essential dkms linux-headers-\$(uname -r)"
+
+#############################################################################################
+# Installation of Guest Additions Software on Linux VM server:
+#############################################################################################
+sudo apt update 
+sudo apt install -y build-essential dkms linux-headers-$(uname -r)
+sudo mount /dev/cdrom /mnt
+sudo /mnt/VBoxLinuxAdditions.run
+reboot
+
+
+#############################################################################################
+# AD Ubuntu integration:
+#############################################################################################
+
+sudo apt-get update
+sudo apt-get install net-tools -y
+sudo apt-get install sssd-ad sssd-tools realmd adcli nfs-common -y
+
+#############################################################################################
+# DNS config:
+#############################################################################################
+sudo cat << EOF > /etc/resolv.conf
+nameserver 192.168.1.253
+nameserver 127.0.0.53
+options edns0 trust-ad
+search .
+EOF
+
+#############################################################################################
+# NTP config:
+#############################################################################################
+echo "Configurando NTP..."
+sudo cat << EOF >  /etc/systemd/timesyncd.conf
+[Time]
+NTP=ufvdc1.ufv.org
+FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
+EOF
+
+sudo timedatectl set-timezone Europe/Madrid
+sudo systemctl restart systemd-timesyncd
+sudo systemctl enable systemd-timesyncd --now
+timedatectl show-timesync --all
+timedatectl status
+
+
+#############################################################################################
+# AD config:
+#############################################################################################
+sudo realm -v discover ufv.org
+sudo realm join --user=Integrator UFV.org
+sudo pam-auth-update --enable mkhomedir
+sudo systemctl restart sssd
+sudo systemctl restart realmd
+
+id "Integrator@UFV.org"
+getent passwd "Integrator@UFV.org"
+
+
+ENDSSH
+
+
+
+ssh "Integrator@UFV.org"@localhost
+
+
+
+
+

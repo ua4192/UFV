@@ -40,7 +40,3 @@ VBoxManage storageattach "$VMNAME" --storagectl "IDE Controller" --port 0 --devi
 VBoxManage guestcontrol "$VMNAME" run --exe "C:\Windows\System32\cmd.exe" --username "Administrator" --password "Airbusds2024!" -- cmd /c "start /wait D:\\VBoxWindowsAdditions.exe /S"
 
 
-
-
-
-# added line

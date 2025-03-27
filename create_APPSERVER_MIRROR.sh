@@ -89,5 +89,7 @@ VBoxManage storageattach "$VMNAME" --storagectl "IDE Controller" --port 0 --devi
 # Configurar arranque desde CD
 VBoxManage modifyvm "$VMNAME" --boot1 dvd --boot2 disk --boot3 none --boot4 none
 
-
+# Configurar shared folder
 VBoxManage sharedfolder add "$VMNAME" --name "UFV" --hostpath "C:\UFV" --automount
+
+echo "Máquina virtual $VMNAME creada y configurada correctamente."

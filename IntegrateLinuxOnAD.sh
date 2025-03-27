@@ -11,7 +11,7 @@ sudo apt-get install sssd-ad sssd-tools realmd adcli nfs-common -y
 # DNS config:
 #############################################################################################
 sudo cat << EOF > /etc/resolv.conf
-nameserver 192.168.1.253
+nameserver 192.168.140.253
 nameserver 127.0.0.53
 options edns0 trust-ad
 search .
@@ -32,7 +32,6 @@ sudo systemctl restart systemd-timesyncd
 sudo systemctl enable systemd-timesyncd --now
 timedatectl show-timesync --all
 timedatectl status
-
 
 #############################################################################################
 # AD config:
