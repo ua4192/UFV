@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    environment {
+        ANSIBLE_INVENTORY = 'inventory.ini'
+        PLAYBOOK_NGINX = 'install_nginx.yml'
+        SCRIPT_WINDOWS = 'script.ps1'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/tu-repo/tu-proyecto.git'
+            }
+        }
+
+        stage('Instalar NGINX en Ubuntu') {
+            steps {
+                script {
+                    sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ${PLAYBOOK_NGINX}"
+                }
+            }
+        }
+
+        stage('Ejecutar script en Windows') {
+            steps {
+                script {
+                    sh "ansible -i ${ANSIBLE_INVENTORY} windows -m win_shell -a '${SCRIPT_WINDOWS}'"
+                }
+            }
+        }
+    }
+}
